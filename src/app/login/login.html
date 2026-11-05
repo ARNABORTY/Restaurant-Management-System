@@ -1,0 +1,67 @@
+<main class="login-page">
+  <section class="login-card" aria-label="Havenly staff sign in">
+    <aside class="login-story">
+      <a class="login-brand" href="/" aria-label="Havenly home">
+        <span class="brand-mark"><svg lucideBuilding2 size="20"></svg></span>
+        <span><strong>Havenly</strong><small>Resident operations</small></span>
+      </a>
+
+      <div class="story-copy">
+        <span class="story-kicker"><i></i> YOUR PORTFOLIO, IN GOOD HANDS</span>
+        <h1>Make room for<br /><em>better living.</em></h1>
+        <p>One thoughtful workspace for the people, places, and details that make a community feel like home.</p>
+        <div class="story-note">
+          <span class="note-icon"><svg lucideShieldCheck size="18"></svg></span>
+          <span><strong>Everything in its place</strong><small>Residents, operations, and insights together.</small></span>
+          <svg class="note-arrow" lucideArrowRight size="16"></svg>
+        </div>
+      </div>
+      <span class="story-footer">A little more care, in every detail.</span>
+      <span class="story-orb orb-one"></span><span class="story-orb orb-two"></span>
+    </aside>
+
+    <section class="login-panel">
+      <div class="login-panel-top"><span>WELCOME BACK</span><span class="secure-label"><svg lucideShieldCheck size="14"></svg> Secure workspace</span></div>
+      <div class="login-form-wrap">
+        <span class="mobile-brand"><span class="brand-mark"><svg lucideBuilding2 size="19"></svg></span><strong>Havenly</strong></span>
+        <span class="form-eyebrow">YOUR SPACE IS READY</span>
+        <h2>Sign in to Havenly</h2>
+        <p class="form-intro">Enter your details to continue to your workspace.</p>
+
+        <form [formGroup]="loginForm" (ngSubmit)="submit()" novalidate>
+          <label class="field-label" for="login-email">Work email</label>
+          <div class="input-wrap" [class.invalid]="loginForm.controls.email.touched && loginForm.controls.email.invalid">
+            <svg lucideMail size="17"></svg>
+            <input id="login-email" type="email" formControlName="email" placeholder="you@company.com" autocomplete="username" />
+          </div>
+          @if (loginForm.controls.email.touched && loginForm.controls.email.invalid) {
+            <small class="field-error">Enter a valid work email address.</small>
+          }
+
+          <div class="password-label-row">
+            <label class="field-label" for="login-password">Password</label>
+            <a href="mailto:support@havenly.app?subject=Password%20help">Forgot password?</a>
+          </div>
+          <div class="input-wrap" [class.invalid]="loginForm.controls.password.touched && loginForm.controls.password.invalid">
+            <svg lucideLockKeyhole size="17"></svg>
+            <input id="login-password" [type]="showPassword() ? 'text' : 'password'" formControlName="password" placeholder="Enter your password" autocomplete="current-password" />
+            <button type="button" class="password-toggle" [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'" (click)="showPassword.update((visible) => !visible)">
+              @if (showPassword()) {<svg lucideEyeOff size="17"></svg>} @else {<svg lucideEye size="17"></svg>}
+            </button>
+          </div>
+          @if (loginForm.controls.password.touched && loginForm.controls.password.invalid) {
+            <small class="field-error">Enter your password to continue.</small>
+          }
+
+          @if (errorMessage()) {<p class="login-error" role="alert">{{ errorMessage() }}</p>}
+          <button class="sign-in-button" type="submit" [disabled]="isSubmitting()">
+            @if (isSubmitting()) {Signing in…} @else {Sign in <svg lucideArrowRight size="17"></svg>}
+          </button>
+        </form>
+
+        <p class="demo-note">Sign in with the administrator account configured for this workspace. Ask your administrator for access.</p>
+      </div>
+      <footer class="login-footer"><span>© 2026 Havenly</span><span>Made for people who care.</span></footer>
+    </section>
+  </section>
+</main>
