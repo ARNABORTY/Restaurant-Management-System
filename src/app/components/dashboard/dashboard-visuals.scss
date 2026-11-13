@@ -1,0 +1,783 @@
+app-dashboard {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 92% 10%, rgb(212 175 55 / 7%), transparent 34%),
+    radial-gradient(ellipse at 8% 68%, rgb(124 83 28 / 8%), transparent 33%),
+    linear-gradient(135deg, #0d0d0d, #121210 54%, #0c0c0b);
+}
+
+app-dashboard::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background:
+    radial-gradient(circle at 22% 18%, rgb(243 206 91 / 5%), transparent 24%),
+    radial-gradient(circle at 78% 72%, rgb(212 175 55 / 4%), transparent 28%);
+  content: "";
+  pointer-events: none;
+  animation: ambient-drift 18s ease-in-out infinite alternate;
+}
+
+app-dashboard .dashboard-section {
+  position: relative;
+  z-index: 1;
+  max-width: 1540px;
+  margin: 0 auto;
+  padding: 104px clamp(22px, 7vw, 108px) 90px;
+}
+
+app-dashboard .dashboard-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+app-dashboard .eyebrow {
+  color: var(--gold);
+  font-size: 0.61rem;
+  font-weight: 600;
+  letter-spacing: 0.21em;
+}
+
+app-dashboard .dashboard-heading h2 {
+  margin: 13px 0 7px;
+  color: #f4f1e9;
+  font-family: var(--font-luxury);
+  font-size: clamp(2rem, 3.8vw, 3.15rem);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+app-dashboard .dashboard-heading > div:first-child > p {
+  margin: 0;
+  color: #aaa397;
+  font-size: 0.72rem;
+}
+
+app-dashboard .service-indicator,
+app-dashboard .ticker-live,
+app-dashboard .floor-live {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border: 1px solid #38362e;
+  color: #a7a399;
+  font-size: 0.57rem;
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+}
+
+app-dashboard .service-indicator > span:first-child,
+app-dashboard .ticker-live i,
+app-dashboard .floor-live i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #75b981;
+  box-shadow: 0 0 9px rgb(117 185 129 / 60%);
+  animation: live-radar 2.2s ease-out infinite;
+}
+
+app-dashboard .ambience-ticker {
+  margin-top: 37px;
+}
+
+app-dashboard .ticker-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 13px;
+}
+
+app-dashboard .ticker-heading h3 {
+  margin: 6px 0 0;
+  color: #eee9df;
+  font: 400 1.17rem var(--font-display);
+}
+
+app-dashboard .ticker-heading h3 span {
+  color: #d3b451;
+  font-style: italic;
+}
+
+app-dashboard .ticker-live {
+  padding: 7px 9px;
+  font-size: 0.48rem;
+}
+
+app-dashboard .ticker-live i {
+  width: 6px;
+  height: 6px;
+}
+
+app-dashboard .service-indicator strong,
+app-dashboard .ticker-live strong,
+app-dashboard .floor-live strong {
+  font-weight: 500;
+}
+
+app-dashboard .ticker-stage {
+  position: relative;
+  min-height: 164px;
+  border: 1px solid rgb(212 175 55 / 18%);
+  background: #11110f;
+}
+
+app-dashboard .ticker-viewport {
+  overflow: hidden;
+  height: 164px;
+}
+
+app-dashboard .ticker-track {
+  display: flex;
+  width: max-content;
+  height: 100%;
+  gap: 9px;
+  padding: 8px;
+  animation: ticker-scroll 48s linear infinite;
+}
+
+app-dashboard .ticker-stage:hover .ticker-track {
+  animation-play-state: paused;
+}
+
+app-dashboard .ticker-photo {
+  position: relative;
+  width: clamp(180px, 19vw, 260px);
+  height: 100%;
+  flex: 0 0 auto;
+  overflow: hidden;
+  margin: 0;
+  background: #1a1915;
+}
+
+app-dashboard .ticker-photo::after {
+  position: absolute;
+  inset: 30% 0 0;
+  background: linear-gradient(transparent, rgb(9 9 8 / 88%));
+  content: "";
+}
+
+app-dashboard .ticker-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.78;
+  transition: opacity 400ms ease, transform 700ms ease;
+}
+
+app-dashboard .ticker-stage:hover .ticker-photo img {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+app-dashboard .ticker-photo figcaption {
+  position: absolute;
+  z-index: 1;
+  right: 12px;
+  bottom: 11px;
+  left: 12px;
+  color: #f2ecdd;
+  font: italic 0.72rem var(--font-display);
+}
+
+app-dashboard .ticker-glass-stats {
+  position: absolute;
+  right: 17px;
+  bottom: 16px;
+  display: grid;
+  width: min(650px, calc(100% - 34px));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  padding: 12px 4px;
+  border: 1px solid rgb(212 175 55 / 32%);
+  background: rgb(13 13 12 / 78%);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 9px 28px rgb(0 0 0 / 35%);
+}
+
+app-dashboard .live-stat {
+  min-width: 0;
+  padding: 0 12px;
+  border-right: 1px solid rgb(212 175 55 / 20%);
+}
+
+app-dashboard .live-stat:last-child {
+  border-right: 0;
+}
+
+app-dashboard .live-stat > span {
+  display: block;
+  overflow: hidden;
+  color: #a59e8e;
+  font-size: 0.44rem;
+  letter-spacing: 0.09em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+app-dashboard .live-stat strong {
+  display: flex;
+  min-height: 21px;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  margin-top: 5px;
+  color: #f0e9d8;
+  font: 500 0.76rem var(--font-display);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+app-dashboard .queue-pulse {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #d4af37;
+  box-shadow: 0 0 8px rgb(212 175 55 / 65%);
+  animation: live-radar 1.8s ease-out infinite;
+}
+
+app-dashboard .quick-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 20px 0 29px;
+  padding: 11px 12px;
+  border: 1px solid #302d26;
+  background: linear-gradient(90deg, rgb(25 24 20 / 93%), rgb(17 17 15 / 92%));
+}
+
+app-dashboard .quick-actions-label {
+  margin: 0 5px 0 2px;
+  color: #a59d89;
+  font-size: 0.48rem;
+  letter-spacing: 0.13em;
+  white-space: nowrap;
+}
+
+app-dashboard .quick-action {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 10px;
+  border: 1px solid #4a422e;
+  background: rgb(212 175 55 / 5%);
+  color: #d5c795;
+  cursor: pointer;
+  font: 500 0.52rem var(--font-body);
+  text-decoration: none;
+  transition: background 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+app-dashboard .quick-action:hover {
+  background: rgb(212 175 55 / 14%);
+  box-shadow: 0 0 14px rgb(212 175 55 / 15%);
+  transform: translateY(-1px);
+}
+
+app-dashboard .quick-action.primary-action {
+  border-color: #9c7b27;
+  background: linear-gradient(115deg, #b38d2e, #e1c45a);
+  color: #17140b;
+}
+
+app-dashboard .quick-action.alert-action {
+  border-color: #785837;
+  color: #edbd76;
+}
+
+app-dashboard .kitchen-shortcut {
+  margin-left: auto;
+  color: #aaa397;
+  font-size: 0.53rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+app-dashboard .kitchen-shortcut:hover {
+  color: var(--gold-light);
+}
+
+app-dashboard .kitchen-shortcut span {
+  padding-left: 4px;
+  color: var(--gold);
+}
+
+app-dashboard .alert-confirmation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: -20px 0 22px;
+  color: #d8c17a;
+  font-size: 0.58rem;
+}
+
+app-dashboard .alert-confirmation .queue-pulse {
+  width: 7px;
+  height: 7px;
+}
+
+app-dashboard .dashboard-tabs {
+  display: flex;
+  gap: 5px;
+  margin: 0 0 25px;
+  padding-bottom: 1px;
+  border-bottom: 1px solid #38352d;
+}
+
+app-dashboard .dashboard-tabs button {
+  position: relative;
+  display: inline-flex;
+  min-height: 47px;
+  align-items: center;
+  gap: 9px;
+  padding: 0 17px;
+  border: 0;
+  background: transparent;
+  color: #948f85;
+  cursor: pointer;
+  font: 0.62rem var(--font-body);
+  letter-spacing: 0.04em;
+  transition: color 160ms ease, background 160ms ease;
+}
+
+app-dashboard .dashboard-tabs button::after {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #aa771c, #f3ce5b, #d4af37);
+  content: "";
+  opacity: 0;
+  transform: scaleX(0.65);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+app-dashboard .dashboard-tabs button:hover,
+app-dashboard .dashboard-tabs button.active {
+  background: linear-gradient(180deg, transparent, rgb(212 175 55 / 7%));
+  color: var(--gold-light);
+}
+
+app-dashboard .dashboard-tabs button.active::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+app-dashboard .tab-index {
+  color: #8d7a4b;
+  font: 0.52rem var(--font-body);
+}
+
+app-dashboard .dashboard-tab-panel {
+  animation: dashboard-panel-in 320ms ease both;
+}
+
+app-dashboard .service-mix-card {
+  margin-top: 14px;
+  padding: 21px;
+  border: 1px solid #3b3528;
+  background:
+    radial-gradient(ellipse at 15% 50%, rgb(212 175 55 / 5%), transparent 38%),
+    linear-gradient(145deg, #1a1916, #121211 78%);
+}
+
+app-dashboard .service-mix-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+app-dashboard .card-kicker {
+  color: #aaa087;
+  font-size: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+
+app-dashboard .service-mix-heading h3 {
+  margin: 6px 0 0;
+  color: #eee9df;
+  font: 400 1.13rem var(--font-display);
+}
+
+app-dashboard .service-mix-heading p {
+  margin: 5px 0 0;
+  color: #858076;
+  font-size: 0.57rem;
+}
+
+app-dashboard .floor-live {
+  padding: 7px 9px;
+  font-size: 0.47rem;
+}
+
+app-dashboard .floor-live i {
+  width: 6px;
+  height: 6px;
+}
+
+app-dashboard .service-mix-layout {
+  display: flex;
+  align-items: center;
+  gap: clamp(24px, 6vw, 80px);
+  margin-top: 19px;
+}
+
+app-dashboard .table-donut {
+  display: grid;
+  width: 152px;
+  height: 152px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 50%;
+  filter: drop-shadow(0 0 14px rgb(212 175 55 / 10%));
+  transition: filter 240ms ease, transform 240ms ease;
+}
+
+app-dashboard .table-donut:hover {
+  filter: drop-shadow(0 0 22px rgb(212 175 55 / 25%));
+  transform: rotate(4deg);
+}
+
+app-dashboard .donut-center {
+  display: flex;
+  width: 70%;
+  height: 70%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #39352b;
+  border-radius: 50%;
+  background: #151512;
+  box-shadow: inset 0 0 20px rgb(0 0 0 / 55%);
+}
+
+app-dashboard .donut-center strong {
+  font: 400 1.6rem var(--font-display);
+}
+
+app-dashboard .donut-center span {
+  margin-top: 3px;
+  color: #958b72;
+  font-size: 0.45rem;
+  letter-spacing: 0.13em;
+}
+
+app-dashboard .status-legend {
+  display: grid;
+  min-width: min(100%, 300px);
+  gap: 6px;
+}
+
+app-dashboard .status-filter,
+app-dashboard .show-all-filter {
+  display: flex;
+  min-height: 34px;
+  align-items: center;
+  gap: 9px;
+  padding: 5px 9px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #aaa397;
+  cursor: pointer;
+  font: 0.59rem var(--font-body);
+  text-align: left;
+  transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
+}
+
+app-dashboard .status-filter.selected,
+app-dashboard .show-all-filter.selected,
+app-dashboard .status-filter:hover,
+app-dashboard .show-all-filter:hover {
+  border-color: #51472e;
+  background: rgb(212 175 55 / 6%);
+  color: #e7dcc0;
+}
+
+app-dashboard .status-filter i {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #73977d;
+}
+
+app-dashboard .status-filter i.occupied {
+  background: #d4af37;
+  box-shadow: 0 0 8px rgb(212 175 55 / 60%);
+}
+
+app-dashboard .status-filter i.reserved {
+  background: #9c83c5;
+}
+
+app-dashboard .status-filter strong {
+  margin-left: auto;
+  font-size: 0.74rem;
+}
+
+app-dashboard .show-all-filter {
+  justify-content: space-between;
+  margin-top: 3px;
+  border-top: 1px solid #34312a;
+  color: #c3b579;
+}
+
+app-dashboard .show-all-filter span {
+  color: var(--gold-light);
+}
+
+app-dashboard .floor-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 17px;
+  margin: 33px 0 15px;
+}
+
+app-dashboard .floor-heading h3 {
+  margin: 5px 0 0;
+  color: #e9e5dc;
+  font-family: var(--font-display);
+  font-size: 1.22rem;
+  font-weight: 400;
+}
+
+app-dashboard .floor-heading > p {
+  margin: 0;
+  color: #89847a;
+  font-size: 0.57rem;
+}
+
+app-dashboard .table-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+app-dashboard .table-card {
+  min-width: 0;
+  padding: 17px;
+  border: 1px solid #34312a;
+  border-top: 2px solid #77736a;
+  background: linear-gradient(145deg, #191917, #131311 85%);
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+app-dashboard .table-card.occupied { border-top-color: #bd9a3c; }
+app-dashboard .table-card.reserved { border-top-color: #8b78af; }
+app-dashboard .table-card.available { border-top-color: #71917a; }
+
+app-dashboard .table-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+app-dashboard .table-label {
+  color: #858076;
+  font-size: 0.52rem;
+  letter-spacing: 0.16em;
+}
+
+app-dashboard .status-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #c1bdb4;
+  font-size: 0.56rem;
+}
+
+app-dashboard .status-badge i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #71917a;
+}
+
+app-dashboard .occupied .status-badge i {
+  background: #d4af37;
+  box-shadow: 0 0 9px rgb(212 175 55 / 60%);
+  animation: live-radar 2s ease-out infinite;
+}
+
+app-dashboard .reserved .status-badge i { background: #a28acb; }
+
+app-dashboard .table-number {
+  display: block;
+  margin-top: 15px;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 400;
+}
+
+app-dashboard .table-seats {
+  display: block;
+  margin-top: 2px;
+  color: #89857c;
+  font-size: 0.6rem;
+}
+
+app-dashboard .table-reservation {
+  display: block;
+  margin-top: 7px;
+  color: #c4a64e;
+  font-size: 0.56rem;
+  line-height: 1.5;
+}
+
+app-dashboard .table-bill {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+  margin-top: 17px;
+  padding-top: 11px;
+  border-top: 1px solid #302e28;
+  color: #858178;
+  font-size: 0.58rem;
+}
+
+app-dashboard .table-bill strong {
+  color: var(--gold-light);
+  font-size: 0.66rem;
+  font-weight: 500;
+}
+
+app-dashboard .table-actions {
+  display: flex;
+  gap: 7px;
+  margin-top: 13px;
+}
+
+app-dashboard .table-actions button {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 5px;
+  border: 1px solid #474237;
+  background: transparent;
+  color: #c5b77d;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.54rem;
+  transition: background 180ms ease, border-color 180ms ease, opacity 180ms ease;
+}
+
+app-dashboard .table-actions .status-button:hover {
+  border-color: var(--gold);
+  background: rgb(212 175 55 / 8%);
+}
+
+app-dashboard .table-actions .clear-button {
+  border-color: #3a3831;
+  color: #99958c;
+}
+
+app-dashboard .table-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.38;
+}
+
+app-dashboard .empty-floor {
+  grid-column: 1 / -1;
+  padding: 30px 14px;
+  border: 1px dashed #51472e;
+  color: #968d78;
+  font-size: 0.65rem;
+  text-align: center;
+}
+
+app-dashboard .dashboard-note {
+  margin: 15px 0 0;
+  color: #77736a;
+  font-size: 0.52rem;
+}
+
+@keyframes ambient-drift {
+  from { transform: translate3d(-1%, -1%, 0) scale(1); }
+  to { transform: translate3d(1%, 1%, 0) scale(1.035); }
+}
+
+@keyframes dashboard-panel-in {
+  from { opacity: 0; transform: translateY(9px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ticker-scroll {
+  to { transform: translateX(-50%); }
+}
+
+@keyframes live-radar {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(212 175 55 / 35%); }
+  65% { box-shadow: 0 0 0 8px rgb(212 175 55 / 0%); }
+}
+
+@media (max-width: 1100px) {
+  app-dashboard .table-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  app-dashboard .quick-actions { flex-wrap: wrap; }
+  app-dashboard .quick-actions-label { flex-basis: 100%; }
+}
+
+@media (max-width: 700px) {
+  app-dashboard .dashboard-section { padding: 86px 20px 70px; }
+  app-dashboard .dashboard-heading { align-items: flex-start; flex-direction: column; }
+  app-dashboard .dashboard-heading h2 { font-size: clamp(1.7rem, 8vw, 2.45rem); }
+  app-dashboard .ticker-glass-stats {
+    right: 9px;
+    bottom: 9px;
+    width: calc(100% - 18px);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px 0;
+    padding: 9px 2px;
+  }
+  app-dashboard .live-stat:nth-child(2) { border-right: 0; }
+  app-dashboard .live-stat > span { font-size: 0.4rem; }
+  app-dashboard .live-stat strong { font-size: 0.68rem; }
+  app-dashboard .quick-actions { gap: 7px; }
+  app-dashboard .quick-actions-label { flex-basis: 100%; }
+  app-dashboard .quick-action { flex: 1 1 42%; padding: 0 7px; font-size: 0.49rem; }
+  app-dashboard .kitchen-shortcut { flex-basis: 100%; margin: 4px 0 0; text-align: right; }
+  app-dashboard .dashboard-tabs { gap: 0; overflow-x: auto; }
+  app-dashboard .dashboard-tabs button { flex: 0 0 auto; gap: 6px; padding: 0 12px; font-size: 0.56rem; }
+  app-dashboard .service-mix-layout { gap: 20px; }
+}
+
+@media (max-width: 550px) {
+  app-dashboard .dashboard-section { padding: 78px 15px 60px; }
+  app-dashboard .ticker-heading { align-items: flex-start; flex-direction: column; }
+  app-dashboard .ticker-stage, app-dashboard .ticker-viewport { min-height: 200px; height: 200px; }
+  app-dashboard .ticker-glass-stats { bottom: 8px; }
+  app-dashboard .service-mix-card { padding: 15px; }
+  app-dashboard .service-mix-layout { align-items: flex-start; gap: 13px; }
+  app-dashboard .table-donut { width: 112px; height: 112px; }
+  app-dashboard .donut-center strong { font-size: 1.25rem; }
+  app-dashboard .status-legend { min-width: 0; flex: 1; }
+  app-dashboard .status-filter, app-dashboard .show-all-filter { gap: 6px; padding: 4px 6px; font-size: 0.53rem; }
+  app-dashboard .floor-heading { align-items: flex-start; flex-direction: column; gap: 5px; }
+  app-dashboard .table-grid { gap: 9px; }
+  app-dashboard .table-card { padding: 12px; }
+  app-dashboard .table-actions { flex-direction: column; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  app-dashboard::before,
+  app-dashboard .ticker-track,
+  app-dashboard .service-indicator > span:first-child,
+  app-dashboard .ticker-live i,
+  app-dashboard .floor-live i,
+  app-dashboard .queue-pulse,
+  app-dashboard .occupied .status-badge i {
+    animation: none;
+  }
+}

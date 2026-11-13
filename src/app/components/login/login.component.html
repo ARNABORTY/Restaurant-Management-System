@@ -1,0 +1,90 @@
+<main class="login-page">
+  <div class="ambience-layer" aria-hidden="true"></div>
+  <a class="portal-brand" routerLink="/" aria-label="Return to Goody Foody home">
+    <span class="brand-mark">G<span>F</span></span>
+    <span>GOODY FOODY</span>
+  </a>
+
+  <section class="login-card" aria-labelledby="portal-title">
+    <div class="card-ornament" aria-hidden="true">✦</div>
+    <span class="portal-kicker">PRIVATE STAFF ACCESS</span>
+    <h1 id="portal-title">GOODY FOODY</h1>
+    <p class="portal-subtitle">EXECUTIVE PORTAL</p>
+    <p class="welcome-copy">A considered welcome to the heart of the house.</p>
+
+    @if (loginError()) {
+      <div class="login-alert" role="alert">
+        <span aria-hidden="true">!</span>
+        {{ loginError() }}
+      </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="submitLogin()">
+      <label class="login-field">
+        <span>Email address</span>
+        <input
+          type="email"
+          formControlName="email"
+          autocomplete="username"
+          placeholder="name@goodyfoody.in"
+          [attr.aria-invalid]="showError(form.controls.email)"
+          aria-describedby="email-error"
+        />
+        @if (showError(form.controls.email)) {
+          <small id="email-error">Enter a valid email address.</small>
+        }
+      </label>
+
+      <label class="login-field">
+        <span>Password</span>
+        <span class="password-control">
+          <input
+            [type]="passwordVisible() ? 'text' : 'password'"
+            formControlName="password"
+            autocomplete="current-password"
+            placeholder="Enter your password"
+            [attr.aria-invalid]="showError(form.controls.password)"
+            aria-describedby="password-error"
+          />
+          <button
+            type="button"
+            class="password-toggle"
+            [attr.aria-label]="passwordVisible() ? 'Hide password' : 'Show password'"
+            [attr.aria-pressed]="passwordVisible()"
+            (click)="togglePasswordVisibility()"
+          >
+            @if (passwordVisible()) { Hide } @else { Show }
+          </button>
+        </span>
+        @if (showError(form.controls.password)) {
+          <small id="password-error">Enter your staff password.</small>
+        }
+      </label>
+
+      <button class="login-button" type="submit">
+        Enter the house <span aria-hidden="true">→</span>
+      </button>
+    </form>
+
+    <div class="demo-access">
+      <div class="demo-heading">
+        <span>ONE-CLICK DEMO FILL</span>
+        <i></i>
+      </div>
+      <p>Choose a role to fill its demo credentials.</p>
+      <div class="demo-options">
+        @for (credential of demoCredentials; track credential.role) {
+          <button type="button" class="demo-option" (click)="fillDemo(credential.role)">
+            <span class="demo-role">{{ credential.label }}</span>
+            <span class="demo-email">{{ credential.email }}</span>
+            <span class="demo-password">{{ credential.password }}</span>
+            <span class="demo-fill">Fill credentials <b aria-hidden="true">↗</b></span>
+          </button>
+        }
+      </div>
+      <small class="demo-warning">Demo credentials are client-side only; do not use for real staff accounts.</small>
+    </div>
+  </section>
+
+  <a class="return-link" routerLink="/">← Return to the dining room</a>
+</main>

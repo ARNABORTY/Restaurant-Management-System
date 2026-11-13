@@ -1,0 +1,54 @@
+<header class="site-header">
+  <a class="brand" routerLink="/" fragment="home" (click)="closeMenu()" aria-label="Goody Foody home">
+    <span class="brand-mark" aria-hidden="true">G<span>F</span></span>
+    <span class="brand-name">GOODY <b>FOODY</b></span>
+  </a>
+
+  <nav class="navigation" [class.is-open]="menuOpen()" aria-label="Main navigation">
+    <a routerLink="/" fragment="home" (click)="closeMenu()">Home</a>
+    <a routerLink="/" fragment="menu" (click)="closeMenu()">Our menu</a>
+    <a routerLink="/" fragment="gallery" (click)="closeMenu()">Ambience</a>
+    <a routerLink="/" fragment="reviews" (click)="closeMenu()">Reviews</a>
+    <a routerLink="/" fragment="reservations" (click)="closeMenu()">Reservations</a>
+    @if (auth.isLoggedIn()) {
+      @if (auth.getCurrentRole() === 'manager') {
+        <a routerLink="/dashboard" routerLinkActive="active" (click)="closeMenu()">Dashboard</a>
+      }
+      <a routerLink="/kitchen" routerLinkActive="active" (click)="closeMenu()">Kitchen KDS</a>
+      <span class="role-badge">
+        {{ auth.getCurrentRole() === 'manager' ? 'Manager' : 'Executive Chef' }}
+      </span>
+      <button class="logout-button" type="button" (click)="logout()">Logout</button>
+    } @else {
+      <a class="portal-link" routerLink="/login" routerLinkActive="active" (click)="closeMenu()">
+        Admin Portal <span>Staff Login</span>
+      </a>
+    }
+    <a class="nav-cta" routerLink="/" fragment="reservations" (click)="closeMenu()">Reserve a table <span>↗</span></a>
+  </nav>
+
+  <div class="header-actions">
+    <button
+      class="cart-button"
+      type="button"
+      (click)="cartRequested.emit()"
+      [attr.aria-label]="'Open order cart, ' + cart.itemCount() + ' items'"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M5 8h14l1 13H4L5 8Z" />
+        <path d="M9 9V6a3 3 0 0 1 6 0v3" />
+      </svg>
+      <span class="cart-label">Your order</span>
+      <span class="cart-count">{{ cart.itemCount() }}</span>
+    </button>
+    <button
+      class="menu-toggle"
+      type="button"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="menuOpen()"
+      aria-label="Toggle navigation"
+    >
+      <span></span><span></span>
+    </button>
+  </div>
+</header>

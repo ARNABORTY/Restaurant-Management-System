@@ -1,0 +1,79 @@
+<section class="gallery-section" id="gallery" aria-labelledby="gallery-title">
+  <div class="section-heading">
+    <span class="eyebrow">A SENSE OF PLACE</span>
+    <h2 id="gallery-title">Come in. <em>Stay awhile.</em></h2>
+    <p>Considered details, candlelit corners and a little room for wonder.</p>
+  </div>
+
+  <div class="gallery-filters" role="group" aria-label="Filter ambience photographs">
+    @for (category of categories; track category) {
+      <button
+        class="filter-pill"
+        type="button"
+        [class.active]="activeCategory() === category"
+        [attr.aria-pressed]="activeCategory() === category"
+        (click)="selectCategory(category)"
+      >
+        {{ category }}
+      </button>
+    }
+  </div>
+
+  <div class="photo-grid">
+    @for (photo of visiblePhotos(); track photo.id) {
+      <button
+        class="photo-card"
+        type="button"
+        [attr.aria-label]="'View ' + photo.title + ': ' + photo.caption"
+        (click)="openLightbox(photo)"
+      >
+        <img [src]="photo.imageUrl" [alt]="photo.alt" loading="lazy" />
+        <span class="photo-overlay">
+          <span class="photo-category">{{ photo.category }}</span>
+          <strong>{{ photo.title }}</strong>
+          <span>{{ photo.caption }}</span>
+          <span class="view-mark" aria-hidden="true">↗</span>
+        </span>
+      </button>
+    }
+  </div>
+</section>
+
+@if (selectedPhoto(); as photo) {
+  <div class="lightbox-backdrop" (click)="closeLightbox()">
+    <section
+      class="lightbox"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Ambience photograph"
+      (click)="$event.stopPropagation()"
+    >
+      <button
+        class="lightbox-close"
+        type="button"
+        aria-label="Close photograph"
+        (click)="closeLightbox()"
+      >×</button>
+      <button
+        class="lightbox-arrow previous"
+        type="button"
+        aria-label="Previous photograph"
+        (click)="showPreviousPhoto()"
+      >←</button>
+      <figure>
+        <img [src]="photo.imageUrl" [alt]="photo.alt" />
+        <figcaption>
+          <span>{{ photo.category }}</span>
+          <strong>{{ photo.title }}</strong>
+          <p>{{ photo.caption }}</p>
+        </figcaption>
+      </figure>
+      <button
+        class="lightbox-arrow next"
+        type="button"
+        aria-label="Next photograph"
+        (click)="showNextPhoto()"
+      >→</button>
+    </section>
+  </div>
+}

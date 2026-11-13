@@ -1,0 +1,84 @@
+<div class="invoice-overlay" (click)="close()">
+  <section
+    class="invoice-dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="invoice-title"
+    (click)="$event.stopPropagation()"
+  >
+    <button class="invoice-close" type="button" aria-label="Close invoice" (click)="close()">×</button>
+
+    <article class="invoice-paper">
+      <header class="invoice-brand">
+        <span class="brand-ornament" aria-hidden="true">✦</span>
+        <h1 id="invoice-title">GOODY FOODY</h1>
+        <p>Fine Dining &amp; Culinary Art</p>
+        <span class="gold-rule"></span>
+        <div class="restaurant-details">
+          <span>12, The Grand Promenade, Kolkata, West Bengal, India</span>
+          <span>GSTIN: 19AABCG1234F1Z5</span>
+          <span>+91 33 4001 2345</span>
+        </div>
+      </header>
+
+      <div class="invoice-heading">
+        <div>
+          <span class="document-label">TAX INVOICE</span>
+          <strong>#{{ invoice.invoiceNumber }}</strong>
+        </div>
+        <div class="invoice-datetime">
+          <span>{{ invoice.issuedAt | date: 'dd MMM yyyy' }}</span>
+          <span>{{ invoice.issuedAt | date: 'h:mm a' }}</span>
+        </div>
+      </div>
+
+      <div class="guest-details">
+        <div><span>PREPARED FOR</span><strong>{{ invoice.customerName }}</strong></div>
+        <div><span>PHONE</span><strong>{{ invoice.customerPhone }}</strong></div>
+        <div><span>TABLE</span><strong>{{ invoice.tableNumber }}</strong></div>
+      </div>
+
+      <table class="invoice-items">
+        <thead>
+          <tr>
+            <th class="item-col">Item</th>
+            <th>Qty</th>
+            <th>Rate (₹)</th>
+            <th>Amount (₹)</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of invoice.items; track item.id) {
+            <tr>
+              <td>{{ item.name }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ item.price | number: '1.2-2' }}</td>
+              <td>{{ item.amount | number: '1.2-2' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <div class="invoice-totals">
+        <div><span>Item subtotal</span><strong>{{ invoice.itemSubtotal | currency: 'INR' : 'symbol' : '1.2-2' : 'en-IN' }}</strong></div>
+        <div><span>CGST · 2.5%</span><strong>{{ invoice.cgst | currency: 'INR' : 'symbol' : '1.2-2' : 'en-IN' }}</strong></div>
+        <div><span>SGST · 2.5%</span><strong>{{ invoice.sgst | currency: 'INR' : 'symbol' : '1.2-2' : 'en-IN' }}</strong></div>
+        @if (invoice.serviceCharge > 0) {
+          <div><span>Optional service charge · 5%</span><strong>{{ invoice.serviceCharge | currency: 'INR' : 'symbol' : '1.2-2' : 'en-IN' }}</strong></div>
+        }
+        <div class="invoice-grand-total"><span>Grand total</span><strong>{{ invoice.grandTotal | currency: 'INR' : 'symbol' : '1.2-2' : 'en-IN' }}</strong></div>
+      </div>
+
+      <footer class="invoice-thanks">
+        <span class="gold-rule"></span>
+        <p>Thank you for making us part of your evening.</p>
+        <small>We hope to welcome you again soon.</small>
+      </footer>
+    </article>
+
+    <div class="invoice-actions">
+      <button class="print-button" type="button" (click)="printInvoice()">Print / Save PDF <span>↗</span></button>
+      <button class="done-button" type="button" (click)="close()">Done</button>
+    </div>
+  </section>
+</div>

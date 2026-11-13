@@ -1,0 +1,68 @@
+<section class="inventory-panel" aria-labelledby="inventory-title">
+  <div class="section-heading">
+    <div>
+      <span class="eyebrow">THE CELLAR & THE LARDER</span>
+      <h3 id="inventory-title">Ingredients <em>inventory</em></h3>
+      <p>Premium provisions, counted and costed for tonight's service.</p>
+    </div>
+    <div class="inventory-alerts" aria-live="polite">
+      <span class="alert-critical">{{ criticalCount() }} critical</span>
+      <span class="alert-low">{{ lowCount() }} low</span>
+    </div>
+  </div>
+
+  <div class="inventory-table-wrap">
+    <table class="inventory-table">
+      <thead>
+        <tr>
+          <th scope="col">Ingredient</th>
+          <th scope="col">Stock on hand</th>
+          <th scope="col">Threshold</th>
+          <th scope="col">Unit cost</th>
+          <th scope="col">Status</th>
+          <th scope="col">Stock actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of inventory(); track item.id) {
+          <tr>
+            <td>
+              <span class="ingredient-name">{{ item.name }}</span>
+              <span class="ingredient-category">{{ item.category }}</span>
+            </td>
+            <td>
+              <strong class="quantity">{{ formatQuantity(item.quantity) }}</strong>
+              <span class="unit">{{ item.unit }}</span>
+            </td>
+            <td>
+              <span class="threshold-value">{{ formatQuantity(item.threshold) }} {{ item.unit }}</span>
+            </td>
+            <td class="cost-value">{{ item.unitCost | currency: 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}</td>
+            <td>
+              <span class="stock-status" [class]="statusClass(item)">
+                <i aria-hidden="true"></i>{{ statusOf(item) }}
+              </span>
+            </td>
+            <td>
+              <div class="stock-actions">
+                <button type="button" class="restock-button" (click)="restock(item)">
+                  Restock <b>+</b>
+                </button>
+                <button
+                  type="button"
+                  class="usage-button"
+                  [disabled]="item.quantity < item.usageStep"
+                  [attr.aria-label]="'Record usage for ' + item.name"
+                  (click)="recordUsage(item)"
+                >
+                  Record Usage <b>−</b>
+                </button>
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="inventory-note">Stock adjustments are demo records for this session. Unit cost is an indicative purchase rate.</p>
+</section>

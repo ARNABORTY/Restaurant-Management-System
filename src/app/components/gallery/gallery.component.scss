@@ -1,0 +1,171 @@
+:host {
+  display: block;
+  background:
+    radial-gradient(ellipse at 50% 0, rgb(212 175 55 / 5%), transparent 48%),
+    #0d0d0d;
+  color: #f5f2eb;
+}
+
+.gallery-section {
+  padding: clamp(72px, 9vw, 128px) clamp(20px, 7vw, 106px);
+}
+
+.section-heading {
+  max-width: 720px;
+  margin: 0 auto 34px;
+  text-align: center;
+}
+
+.eyebrow {
+  color: var(--gold);
+  font-size: .62rem;
+  font-weight: 600;
+  letter-spacing: .22em;
+}
+
+.section-heading h2 {
+  margin: 14px 0 10px;
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  font-weight: 400;
+}
+
+.section-heading h2 em { color: var(--gold-light); }
+.section-heading p { margin: 0; color: #a7a39a; font-size: .78rem; letter-spacing: .04em; }
+
+.gallery-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 auto 34px;
+}
+
+.filter-pill {
+  padding: 10px 15px;
+  border: 1px solid #39372f;
+  background: #141412;
+  color: #c6c1b6;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: .64rem;
+  letter-spacing: .04em;
+  transition: color 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.filter-pill:hover,
+.filter-pill.active {
+  border-color: var(--gold);
+  background: rgb(212 175 55 / 9%);
+  color: var(--gold-light);
+}
+
+.photo-grid {
+  display: grid;
+  max-width: 1380px;
+  grid-auto-rows: clamp(130px, 16vw, 230px);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0 auto;
+}
+
+.photo-card {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgb(212 175 55 / 12%);
+  background: #161616;
+  cursor: zoom-in;
+  text-align: left;
+  animation: photo-arrive 420ms ease both;
+}
+
+.photo-card:first-child { grid-column: span 2; grid-row: span 2; }
+.photo-card:nth-child(4n + 3) { grid-row: span 2; }
+.photo-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 650ms cubic-bezier(.2, .7, .2, 1), filter 350ms ease; }
+.photo-card:hover img, .photo-card:focus-visible img { transform: scale(1.055); filter: brightness(.68); }
+.photo-card:focus-visible { outline: 2px solid var(--gold-light); outline-offset: 3px; }
+
+.photo-overlay {
+  position: absolute;
+  inset: auto 0 0;
+  display: flex;
+  min-height: 48%;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: 20px;
+  background: linear-gradient(0deg, rgb(8 8 8 / 92%), rgb(24 20 10 / 48%) 68%, transparent);
+  opacity: .9;
+  transform: translateY(8px);
+  transition: opacity 250ms ease, transform 250ms ease;
+}
+
+.photo-card:hover .photo-overlay, .photo-card:focus-visible .photo-overlay { opacity: 1; transform: translateY(0); }
+.photo-category { color: var(--gold-light); font-size: .54rem; letter-spacing: .17em; text-transform: uppercase; }
+.photo-overlay strong { color: #fffaf0; font-family: var(--font-display); font-size: clamp(1.05rem, 1.8vw, 1.6rem); font-weight: 400; }
+.photo-overlay > span:not(.photo-category, .view-mark) { color: #c5c0b5; font-family: var(--font-display); font-size: .75rem; font-style: italic; }
+.view-mark { position: absolute; right: 17px; bottom: 18px; color: var(--gold-light); font-size: 1rem; }
+
+.lightbox-backdrop {
+  position: fixed;
+  z-index: 1300;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: clamp(15px, 4vw, 48px);
+  background: rgb(0 0 0 / 88%);
+  backdrop-filter: blur(12px);
+  animation: lightbox-fade 180ms ease both;
+}
+
+.lightbox {
+  position: relative;
+  display: grid;
+  width: min(100%, 1200px);
+  grid-template-columns: 48px minmax(0, 1fr) 48px;
+  align-items: center;
+  gap: clamp(8px, 2vw, 24px);
+}
+
+.lightbox figure { grid-column: 2; margin: 0; }
+.lightbox figure img { display: block; width: 100%; max-height: 76vh; object-fit: contain; background: #090909; }
+.lightbox figcaption { display: grid; gap: 5px; padding: 15px 3px 0; }
+.lightbox figcaption > span { color: var(--gold-light); font-size: .55rem; letter-spacing: .18em; text-transform: uppercase; }
+.lightbox figcaption strong { color: #f5f2eb; font-family: var(--font-display); font-size: 1.35rem; font-weight: 400; }
+.lightbox figcaption p { margin: 0; color: #aaa59a; font-family: var(--font-display); font-size: .85rem; font-style: italic; }
+.lightbox-close, .lightbox-arrow { display: grid; place-items: center; border: 1px solid rgb(212 175 55 / 55%); background: rgb(13 13 13 / 80%); color: var(--gold-light); cursor: pointer; transition: background 180ms ease, box-shadow 180ms ease; }
+.lightbox-close:hover, .lightbox-arrow:hover { background: rgb(212 175 55 / 14%); box-shadow: 0 0 16px rgb(212 175 55 / 16%); }
+.lightbox-close { position: absolute; z-index: 1; top: -17px; right: -17px; width: 38px; height: 38px; font-size: 1.4rem; }
+.lightbox-arrow { width: 44px; height: 52px; font-size: 1.25rem; }
+.lightbox-arrow.previous { grid-column: 1; grid-row: 1; }
+.lightbox-arrow.next { grid-column: 3; grid-row: 1; }
+
+@keyframes photo-arrive {
+  from { opacity: 0; transform: scale(.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes lightbox-fade { from { opacity: 0; } to { opacity: 1; } }
+
+@media (max-width: 850px) {
+  .photo-grid { grid-auto-rows: clamp(130px, 22vw, 190px); grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .gallery-section { padding: 72px 17px; }
+  .gallery-filters { gap: 6px; margin-bottom: 24px; }
+  .filter-pill { padding: 9px 10px; font-size: .58rem; }
+  .photo-grid { grid-auto-rows: 145px; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .photo-card:first-child { grid-column: span 2; grid-row: span 1; }
+  .photo-card:nth-child(4n + 3) { grid-row: span 1; }
+  .photo-overlay { min-height: 58%; padding: 12px; }
+  .photo-overlay > span:not(.photo-category, .view-mark) { max-width: 85%; font-size: .66rem; }
+  .lightbox { grid-template-columns: 34px minmax(0, 1fr) 34px; gap: 5px; }
+  .lightbox-close { top: -14px; right: -4px; }
+  .lightbox-arrow { width: 32px; height: 42px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

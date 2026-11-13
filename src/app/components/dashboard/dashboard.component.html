@@ -1,0 +1,244 @@
+<section class="dashboard-section" id="management">
+  <div class="dashboard-heading">
+    <div>
+      <span class="eyebrow">GOODY FOODY · PRIVATE DINING ROOM</span>
+      <h2>Executive <em class="gold-gradient-text">Control Center</em></h2>
+      <p>A considered view of tonight's service, from the pass to the dining room.</p>
+    </div>
+    <div class="service-indicator">
+      <span></span><strong class="gold-gradient-text">LIVE SERVICE</strong>
+    </div>
+  </div>
+
+  <section class="ambience-ticker" aria-label="Live ambiance and service highlights">
+    <div class="ticker-heading">
+      <div>
+        <span class="eyebrow">A MOMENT IN THE RESTAURANT</span>
+        <h3>Live ambiance <span>&amp; plating</span></h3>
+      </div>
+      <span class="ticker-live"><i></i><strong class="gold-gradient-text">ON THE FLOOR NOW</strong></span>
+    </div>
+    <div class="ticker-stage">
+      <div class="ticker-viewport">
+        <div class="ticker-track">
+          @for (photo of tickerPhotos; track $index) {
+            <figure class="ticker-photo" aria-hidden="true">
+              <img [src]="photo.image" alt="" loading="lazy" />
+              <figcaption>{{ photo.title }}</figcaption>
+            </figure>
+          }
+          @for (photo of tickerPhotos; track $index) {
+            <figure class="ticker-photo" aria-hidden="true">
+              <img [src]="photo.image" alt="" loading="lazy" />
+              <figcaption>{{ photo.title }}</figcaption>
+            </figure>
+          }
+        </div>
+      </div>
+      <div class="ticker-glass-stats">
+        <div class="live-stat">
+          <span>ACTIVE CHEF</span>
+          <strong>{{ activeChef() }}</strong>
+        </div>
+        <div class="live-stat">
+          <span>TABLE OCCUPANCY</span>
+          <strong class="gold-gradient-text">{{ occupancyRate() }}%</strong>
+        </div>
+        <div class="live-stat">
+          <span>VIP BOOKINGS · TODAY</span>
+          <strong class="gold-gradient-text">{{ vipBookingsToday() }}</strong>
+        </div>
+        <div class="live-stat">
+          <span>KITCHEN QUEUE</span>
+          <strong><i class="queue-pulse"></i>{{ activeOrders() }} active</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="quick-actions" aria-label="Executive quick actions">
+    <span class="quick-actions-label">QUICK ACTIONS</span>
+    <a class="quick-action primary-action" routerLink="/" fragment="reservation">
+      <span aria-hidden="true">＋</span> New Reservation
+    </a>
+    <button class="quick-action" type="button" (click)="exportGstReport()">
+      <span aria-hidden="true">↓</span> Generate GST Report
+    </button>
+    <button
+      class="quick-action alert-action"
+      type="button"
+      (click)="raiseKitchenAlert()"
+    >
+      <span aria-hidden="true">✦</span> Emergency Kitchen Alert
+    </button>
+    <a class="kitchen-shortcut" routerLink="/kitchen">
+      Open Kitchen KDS <span aria-hidden="true">↗</span>
+    </a>
+  </div>
+  @if (kitchenAlert(); as alert) {
+    <p class="alert-confirmation" role="status">
+      <span class="queue-pulse"></span>
+      Executive priority sent to the Kitchen Display · {{ alert.createdAt | date: 'h:mm a' }}
+    </p>
+  }
+
+  <nav class="dashboard-tabs" role="tablist" aria-label="Dashboard sections">
+    <button
+      id="overview-tab"
+      type="button"
+      role="tab"
+      [attr.aria-selected]="activeTab() === 'overview'"
+      [attr.aria-controls]="'overview-panel'"
+      [class.active]="activeTab() === 'overview'"
+      (click)="selectTab('overview')"
+    >
+      <span class="tab-index">01</span> Overview &amp; Analytics
+    </button>
+    <button
+      id="inventory-tab"
+      type="button"
+      role="tab"
+      [attr.aria-selected]="activeTab() === 'inventory'"
+      [attr.aria-controls]="'inventory-panel'"
+      [class.active]="activeTab() === 'inventory'"
+      (click)="selectTab('inventory')"
+    >
+      <span class="tab-index">02</span> Inventory Tracker
+    </button>
+    <button
+      id="staff-tab"
+      type="button"
+      role="tab"
+      [attr.aria-selected]="activeTab() === 'staff'"
+      [attr.aria-controls]="'staff-panel'"
+      [class.active]="activeTab() === 'staff'"
+      (click)="selectTab('staff')"
+    >
+      <span class="tab-index">03</span> Staff Roster
+    </button>
+  </nav>
+
+  <section
+    id="overview-panel"
+    class="dashboard-tab-panel"
+    role="tabpanel"
+    aria-labelledby="overview-tab"
+    [hidden]="activeTab() !== 'overview'"
+  >
+    <app-analytics />
+
+    <section class="service-mix-card" aria-labelledby="service-mix-title">
+      <div class="service-mix-heading">
+        <div>
+          <span class="card-kicker">THE DINING ROOM · LIVE</span>
+          <h3 id="service-mix-title">Table service mix</h3>
+          <p>Choose a status to focus the floor view below.</p>
+        </div>
+        <span class="floor-live"><i></i><strong class="gold-gradient-text">LIVE FLOOR</strong></span>
+      </div>
+      <div class="service-mix-layout">
+        <div
+          class="table-donut"
+          role="img"
+          [style.background]="tableStatusGradient()"
+          [attr.aria-label]="occupancyRate() + '% of tables are occupied'"
+        >
+          <div class="donut-center">
+            <strong class="gold-gradient-text">{{ occupancyRate() }}%</strong>
+            <span>OCCUPIED</span>
+          </div>
+        </div>
+        <div class="status-legend" role="group" aria-label="Filter tables by status">
+          @for (status of tableStatuses; track status) {
+            <button
+              type="button"
+              class="status-filter"
+              [class.selected]="tableFilter() === status"
+              [attr.aria-pressed]="tableFilter() === status"
+              [attr.data-status]="status"
+              (click)="selectTableFilter(status)"
+            >
+              <i [class]="status.toLowerCase()"></i>
+              <span>{{ status }}</span>
+              <strong class="gold-gradient-text">{{ tableCount(status) }}</strong>
+            </button>
+          }
+          <button
+            type="button"
+            class="show-all-filter"
+            [class.selected]="tableFilter() === 'All'"
+            [attr.aria-pressed]="tableFilter() === 'All'"
+            (click)="selectTableFilter('All')"
+          >
+            Show all tables <span>{{ tables().length }}</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <div class="floor-heading">
+      <div>
+        <span class="card-kicker">SERVICE FLOOR</span>
+        <h3>Dining room</h3>
+      </div>
+      <p>
+        {{ tableFilter() === 'All' ? 'All tables' : tableFilter() + ' tables' }}
+        · {{ visibleTables().length }} shown
+      </p>
+    </div>
+
+    <div class="table-grid">
+      @for (table of visibleTables(); track table.id) {
+        <article class="table-card" [class]="table.status.toLowerCase()">
+          <div class="table-card-top">
+            <span class="table-label">{{ table.tableNumber }}</span>
+            <span class="status-badge"><i></i>{{ table.status }}</span>
+          </div>
+          <strong class="table-number gold-gradient-text">{{ table.id.toString().padStart(2, '0') }}</strong>
+          <span class="table-seats">{{ table.seats }} seats</span>
+          @if (table.reservation; as reservation) {
+            <span class="table-reservation">
+              {{ reservation.guestName }} · {{ reservation.date }} · {{ reservation.time }}
+            </span>
+          }
+          <div class="table-bill">
+            <span>Active bill</span>
+            <strong>{{ table.orderTotal | currency: 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}</strong>
+          </div>
+          <div class="table-actions">
+            <button type="button" class="status-button" (click)="toggleStatus(table.id)">Change status</button>
+            <button
+              type="button"
+              class="clear-button"
+              [disabled]="table.orderTotal === 0"
+              (click)="clearBill(table.id)"
+            >
+              Clear bill
+            </button>
+          </div>
+        </article>
+      } @empty {
+        <p class="empty-floor">No tables currently match this service status.</p>
+      }
+    </div>
+    <p class="dashboard-note">Demo service data · Updates are held in this session only.</p>
+  </section>
+  <section
+    id="inventory-panel"
+    class="dashboard-tab-panel"
+    role="tabpanel"
+    aria-labelledby="inventory-tab"
+    [hidden]="activeTab() !== 'inventory'"
+  >
+    <app-inventory />
+  </section>
+  <section
+    id="staff-panel"
+    class="dashboard-tab-panel"
+    role="tabpanel"
+    aria-labelledby="staff-tab"
+    [hidden]="activeTab() !== 'staff'"
+  >
+    <app-staff-roster />
+  </section>
+</section>

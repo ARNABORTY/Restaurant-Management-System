@@ -1,0 +1,221 @@
+<section class="analytics-section" aria-label="Executive restaurant analytics">
+  <div class="kpi-grid">
+    <article class="kpi-card">
+      <div class="kpi-topline">
+        <span class="kpi-label">TODAY'S GROSS REVENUE</span>
+        <span class="trend-badge" [class]="revenueTrend().direction">
+          {{ revenueTrend().label }}
+        </span>
+      </div>
+      <strong class="kpi-value gold-gradient-text">
+        {{ todayGrossRevenue() | currency: 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}
+      </strong>
+      <span class="kpi-detail">Settled table bills · day to date</span>
+    </article>
+
+    <article class="kpi-card">
+      <div class="kpi-topline">
+        <span class="kpi-label">ORDERS SERVED</span>
+        <span class="trend-badge" [class]="ordersTrend().direction">
+          {{ ordersTrend().label }}
+        </span>
+      </div>
+      <strong class="kpi-value gold-gradient-text">{{ servedOrdersToday().length }}</strong>
+      <span class="kpi-detail">
+        Average order value
+        {{ averageOrderValue() | currency: 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}
+      </span>
+    </article>
+
+    <article class="kpi-card">
+      <div class="kpi-topline">
+        <span class="kpi-label">TABLE OCCUPANCY</span>
+        <span class="trend-badge live gold-gradient-text">Live floor</span>
+      </div>
+      <strong class="kpi-value gold-gradient-text">{{ occupancyRate() }}<small>%</small></strong>
+      <span class="kpi-detail">
+        {{ occupiedTables() }} of {{ tables().length }} tables ·
+        {{ activeVipTerraceTables() }} active VIP / Terrace
+      </span>
+    </article>
+
+    <article class="kpi-card">
+      <div class="kpi-topline">
+        <span class="kpi-label">GST COLLECTED TODAY</span>
+        <span class="trend-badge" [class]="gstTrend().direction">
+          {{ gstTrend().label }}
+        </span>
+      </div>
+      <strong class="kpi-value gold-gradient-text">
+        {{ gstToday() | currency: 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}
+      </strong>
+      <span class="kpi-detail">
+        CGST {{ cgstToday() | currency: 'INR' : 'symbol' : '1.2-2' : 'en-IN' }}
+        · SGST {{ sgstToday() | currency: 'INR' : 'symbol' : '1.2-2' : 'en-IN' }}
+      </span>
+    </article>
+
+    <article class="kpi-card">
+      <div class="kpi-topline">
+        <span class="kpi-label">TABLE TURNAROUND</span>
+        <span class="trend-badge live gold-gradient-text">Live service</span>
+      </div>
+      <strong class="kpi-value gold-gradient-text">{{ averageTurnaround() }}</strong>
+      <span class="kpi-detail">{{ turnaroundDetail() }}</span>
+    </article>
+  </div>
+
+  <div class="analytics-grid">
+    <section class="analytics-card revenue-card" aria-labelledby="revenue-title">
+      <div class="card-heading">
+        <div>
+          <span class="card-kicker">SETTLED BILL PERFORMANCE</span>
+          <h3 id="revenue-title">Revenue at a glance</h3>
+        </div>
+        <div class="range-switch" role="group" aria-label="Revenue chart period">
+          <button
+            type="button"
+            [class.active]="revenueRange() === 'week'"
+            [attr.aria-pressed]="revenueRange() === 'week'"
+            (click)="setRevenueRange('week')"
+          >Last 7 Days</button>
+          <button
+            type="button"
+            [class.active]="revenueRange() === 'month'"
+            [attr.aria-pressed]="revenueRange() === 'month'"
+            (click)="setRevenueRange('month')"
+          >Monthly Overview</button>
+        </div>
+      </div>
+      <div class="chart-legend"><span></span> Settled revenue <small>Hover over a day for detail</small></div>
+      <div
+        class="bar-chart"
+        role="list"
+        [attr.aria-label]="revenueRange() === 'week' ? 'Daily revenue for the last seven days' : 'Daily revenue this month'"
+      >
+        @for (bar of chartBars(); track bar.key) {
+          <div
+            class="chart-column"
+            role="listitem"
+            [attr.aria-label]="bar.dateLabel + ': ' + (bar.revenue | currency: 'INR' : 'symbol' : '1.2-2' : 'en-IN') + ', ' + bar.orderCount + ' settled orders'"
+          >
+            <div class="chart-well">
+              <span class="bar-tooltip">
+                <strong>{{ bar.dateLabel }}</strong>
+                <span>{{ bar.revenue | currency: 'INR' : 'symbol' : '1.2-2' : 'en-IN' }}</span>
+                <small>{{ bar.orderCount }} settled {{ bar.orderCount === 1 ? 'order' : 'orders' }}</small>
+              </span>
+              <div class="bar-fill" [style.height.%]="bar.heightPercent"></div>
+            </div>
+            <span class="bar-label">{{ bar.label }}</span>
+          </div>
+        }
+      </div>
+      @if (!hasChartRevenue()) {
+        <p class="chart-empty">Settled revenue will appear here once a table bill is cleared.</p>
+      }
+    </section>
+
+    <section class="analytics-card dishes-card" aria-labelledby="dishes-title">
+      <div class="card-heading">
+        <div>
+          <span class="card-kicker">WHAT GUESTS LOVE</span>
+          <h3 id="dishes-title">Culinary performance</h3>
+        </div>
+        <span class="all-time-label">ALL ORDERS</span>
+      </div>
+      @if (topDishes().length) {
+        <ol class="dish-leaderboard">
+          @for (dish of topDishes(); track dish.id; let index = $index) {
+            <li class="dish-row">
+              <span class="dish-rank">{{ (index + 1).toString().padStart(2, '0') }}</span>
+              @if (dish.image) {
+                <img class="dish-thumb" [src]="dish.image" [alt]="dish.name" loading="lazy" />
+              } @else {
+                <span class="dish-thumb dish-placeholder" aria-hidden="true">✦</span>
+              }
+              <div class="dish-info">
+                <div class="dish-name-line">
+                  <strong>{{ dish.name }}</strong>
+                  <span>{{ dish.category }}</span>
+                </div>
+                <div class="dish-sales-line">
+                  <span>{{ dish.quantity }} portions</span>
+                  <strong>{{ dish.revenue | currency: 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}</strong>
+                </div>
+                <div
+                  class="share-track"
+                  role="img"
+                  [attr.aria-label]="'Share of total dish revenue: ' + (dish.sharePercent | number: '1.0-0') + '%'"
+                >
+                  <span [style.width.%]="dish.sharePercent"></span>
+                </div>
+              </div>
+            </li>
+          }
+        </ol>
+      } @else {
+        <div class="empty-analytics">
+          <span aria-hidden="true">✦</span>
+          <p>Signature favourites will appear here as orders are placed.</p>
+        </div>
+      }
+    </section>
+  </div>
+
+  <section class="analytics-card gst-report-print" aria-labelledby="gst-report-title">
+    <div class="report-heading">
+      <div>
+        <span class="card-kicker">TAX &amp; COMPLIANCE</span>
+        <h3 id="gst-report-title">GST &amp; financial compliance report</h3>
+        <p>Issued cart invoices, recorded when the table bill is settled.</p>
+      </div>
+      <div class="report-actions">
+        <button type="button" class="report-button export-csv" (click)="downloadCsvReport()">
+          Export CSV Report <span aria-hidden="true">↓</span>
+        </button>
+        <button type="button" class="report-button secondary print-report" (click)="printTaxSummary()">
+          Print Tax Summary <span aria-hidden="true">⎙</span>
+        </button>
+      </div>
+    </div>
+    <div class="report-table-scroll">
+      <table class="tax-table">
+        <thead>
+          <tr>
+            <th scope="col">Date / Invoice Period</th>
+            <th scope="col">Taxable Base Value</th>
+            <th scope="col">CGST @ 2.5%</th>
+            <th scope="col">SGST @ 2.5%</th>
+            <th scope="col">Total Invoice Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of reportRows(); track row.invoiceNumber) {
+            <tr>
+              <td><span>{{ row.period }}</span><small>{{ row.invoiceNumber }}</small></td>
+              <td>{{ row.taxableBase | currency: 'INR' : 'symbol' : '1.2-2' : 'en-IN' }}</td>
+              <td>{{ row.cgst | currency: 'INR' : 'symbol' : '1.2-2' : 'en-IN' }}</td>
+              <td>{{ row.sgst | currency: 'INR' : 'symbol' : '1.2-2' : 'en-IN' }}</td>
+              <td class="total-cell">{{ row.total | currency: 'INR' : 'symbol' : '1.2-2' : 'en-IN' }}</td>
+            </tr>
+          } @empty {
+            <tr><td class="empty-report" colspan="5">Settled GST invoices will appear here.</td></tr>
+          }
+        </tbody>
+        @if (reportRows().length) {
+          <tfoot>
+            <tr>
+              <th scope="row">Report total</th>
+              <td>{{ reportTotals().taxableBase | currency: 'INR' : 'symbol' : '1.2-2' : 'en-IN' }}</td>
+              <td>{{ reportTotals().cgst | currency: 'INR' : 'symbol' : '1.2-2' : 'en-IN' }}</td>
+              <td>{{ reportTotals().sgst | currency: 'INR' : 'symbol' : '1.2-2' : 'en-IN' }}</td>
+              <td>{{ reportTotals().total | currency: 'INR' : 'symbol' : '1.2-2' : 'en-IN' }}</td>
+            </tr>
+          </tfoot>
+        }
+      </table>
+    </div>
+    <p class="report-note">Legacy demo balances without itemized GST invoices are excluded from this tax report.</p>
+  </section>
+</section>

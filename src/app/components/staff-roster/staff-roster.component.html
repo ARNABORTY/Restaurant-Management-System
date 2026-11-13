@@ -1,0 +1,137 @@
+<section class="roster-panel" aria-labelledby="roster-title">
+  <div class="section-heading">
+    <div>
+      <span class="eyebrow">THE PEOPLE BEHIND THE SERVICE</span>
+      <h3 id="roster-title">Staff <em>roster</em></h3>
+      <p>Today's stations, service windows and attendance.</p>
+    </div>
+    <div class="roster-actions">
+      <span class="duty-count"><i></i>{{ onDutyCount() }} ON DUTY</span>
+      <button class="add-shift-button" type="button" (click)="openAddShift()">
+        <span aria-hidden="true">＋</span> Add New Staff Shift
+      </button>
+    </div>
+  </div>
+
+  <div class="roster-table-wrap">
+    <table class="roster-table">
+      <thead>
+        <tr>
+          <th scope="col">Staff member</th>
+          <th scope="col">Role</th>
+          <th scope="col">Shift timing</th>
+          <th scope="col">Assigned station</th>
+          <th scope="col">Attendance</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (staff of roster(); track staff.id) {
+          <tr>
+            <td>
+              <span class="staff-avatar" aria-hidden="true">{{ staff.staffName.charAt(0) }}</span>
+              <span class="staff-name">{{ staff.staffName }}</span>
+            </td>
+            <td class="staff-role">{{ staff.role }}</td>
+            <td>
+              <span class="shift-name">{{ staff.shift }}</span>
+              <span class="shift-hours">{{ shiftTiming(staff.shift) }}</span>
+            </td>
+            <td class="station-name">{{ staff.station }}</td>
+            <td>
+              <label class="attendance-control">
+                <span class="attendance-status" [class]="attendanceClass(staff.attendance)">
+                  <i aria-hidden="true"></i>{{ staff.attendance }}
+                </span>
+                <select
+                  [value]="staff.attendance"
+                  [attr.aria-label]="'Attendance for ' + staff.staffName"
+                  (change)="updateAttendance(staff.id, $event)"
+                >
+                  @for (status of attendanceOptions; track status) {
+                    <option [value]="status">{{ status }}</option>
+                  }
+                </select>
+              </label>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="roster-note">Shift assignments and attendance are demo records for this session.</p>
+</section>
+
+@if (addShiftOpen()) {
+  <div class="modal-backdrop" (click)="closeAddShift()">
+    <section
+      class="shift-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="shift-modal-title"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="modal-heading">
+        <div>
+          <span class="eyebrow">SERVICE ASSIGNMENT</span>
+          <h3 id="shift-modal-title">Add a staff <em>shift</em></h3>
+        </div>
+        <button class="modal-close" type="button" aria-label="Close dialog" (click)="closeAddShift()">×</button>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="submitShift()">
+        <label>
+          Staff name
+          <input formControlName="staffName" placeholder="Full name" autocomplete="name" />
+          @if (form.controls.staffName.invalid && form.controls.staffName.touched) {
+            <small>Enter a name with at least two characters.</small>
+          }
+        </label>
+        <label>
+          Role
+          <select formControlName="role">
+            <option value="" disabled>Select a role</option>
+            @for (role of roles; track role) {
+              <option [value]="role">{{ role }}</option>
+            }
+          </select>
+          @if (form.controls.role.invalid && form.controls.role.touched) {
+            <small>Choose a staff role.</small>
+          }
+        </label>
+        <div class="form-pair">
+          <label>
+            Service shift
+            <select formControlName="shift">
+              <option value="Morning Shift">Morning · 11:00 AM – 04:00 PM</option>
+              <option value="Evening Shift">Evening · 06:00 PM – 11:30 PM</option>
+            </select>
+          </label>
+          <label>
+            Attendance
+            <select formControlName="attendance">
+              @for (status of attendanceOptions; track status) {
+                <option [value]="status">{{ status }}</option>
+              }
+            </select>
+          </label>
+        </div>
+        <label>
+          Assigned station
+          <select formControlName="station">
+            <option value="" disabled>Select a station</option>
+            @for (station of stations; track station) {
+              <option [value]="station">{{ station }}</option>
+            }
+          </select>
+          @if (form.controls.station.invalid && form.controls.station.touched) {
+            <small>Choose an assigned station.</small>
+          }
+        </label>
+        <div class="modal-actions">
+          <button type="button" class="cancel-button" (click)="closeAddShift()">Cancel</button>
+          <button type="submit" class="save-button">Add to roster <span aria-hidden="true">→</span></button>
+        </div>
+      </form>
+    </section>
+  </div>
+}

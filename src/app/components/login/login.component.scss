@@ -1,0 +1,120 @@
+:host { display: block; min-height: 100vh; }
+
+.login-page {
+  position: relative;
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 82px 20px 55px;
+  overflow: hidden;
+  background: #0d0d0d;
+  isolation: isolate;
+}
+.ambience-layer {
+  position: absolute;
+  z-index: -2;
+  inset: -20px;
+  background:
+    linear-gradient(110deg, rgb(8 8 8 / 76%), rgb(10 10 10 / 48%) 48%, rgb(8 8 8 / 86%)),
+    url("https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1900&q=88") center / cover;
+  filter: blur(3px) brightness(.66);
+  transform: scale(1.025);
+}
+.login-page::after {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 45%, transparent 0, rgb(0 0 0 / 48%) 82%);
+  content: "";
+}
+.portal-brand {
+  position: absolute;
+  top: 28px;
+  left: clamp(22px, 5vw, 72px);
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  color: #f3efe5;
+  font: .67rem var(--font-display);
+  letter-spacing: .17em;
+  text-decoration: none;
+}
+.brand-mark { display: grid; width: 31px; height: 31px; place-items: center; border: 1px solid var(--gold); border-radius: 50%; color: var(--gold-light); font-size: .75rem; }
+.brand-mark span { margin-left: -5px; color: #f5f2eb; }
+
+.login-card {
+  width: min(100%, 470px);
+  padding: clamp(27px, 5vw, 43px);
+  border: 1px solid rgb(212 175 55 / 42%);
+  background: linear-gradient(145deg, rgb(25 25 22 / 94%), rgb(13 13 12 / 94%));
+  box-shadow: 0 24px 90px rgb(0 0 0 / 58%), inset 0 1px rgb(255 255 255 / 5%);
+  backdrop-filter: blur(17px);
+  animation: card-arrive 550ms cubic-bezier(.2, .7, .2, 1) both;
+}
+.card-ornament { color: var(--gold-light); font-size: 1.15rem; text-align: center; }
+.portal-kicker { display: block; margin-top: 15px; color: #b19d5b; font-size: .52rem; letter-spacing: .2em; text-align: center; }
+.login-card h1 { margin: 13px 0 0; color: #f4f0e7; font: 400 clamp(1.65rem, 7vw, 2.2rem) var(--font-display); letter-spacing: .17em; text-align: center; }
+.portal-subtitle { margin: 8px 0 0; color: var(--gold-light); font: .58rem var(--font-body); letter-spacing: .28em; text-align: center; }
+.welcome-copy { margin: 18px 0 24px; color: #a6a197; font: italic .88rem var(--font-display); text-align: center; }
+.login-card form { display: grid; gap: 17px; }
+.login-field { display: grid; gap: 7px; color: #c1bbaf; font-size: .63rem; letter-spacing: .04em; }
+.login-field > input, .password-control {
+  width: 100%;
+  min-height: 45px;
+  border: 1px solid #444033;
+  background: rgb(9 9 8 / 75%);
+  color: #f5f2eb;
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+.login-field > input, .password-control input { padding: 0 12px; outline: 0; font: .72rem var(--font-body); }
+.login-field > input:focus, .password-control:focus-within { border-color: var(--gold); box-shadow: 0 0 0 2px rgb(212 175 55 / 12%); }
+.login-field input::placeholder { color: #706b60; }
+.login-field small { color: #e5a099; font-size: .56rem; }
+.password-control { display: flex; align-items: center; }
+.password-control input { width: 100%; min-width: 0; min-height: 43px; border: 0; background: transparent; color: #f5f2eb; }
+.password-toggle { align-self: stretch; padding: 0 12px; border: 0; background: transparent; color: var(--gold-light); cursor: pointer; font-size: .58rem; }
+.login-button {
+  display: flex;
+  width: 100%;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 4px;
+  border: 1px solid var(--gold);
+  background: linear-gradient(100deg, #ae8925, #d4af37, #c49c2b);
+  color: #19150b;
+  cursor: pointer;
+  font: 600 .68rem var(--font-body);
+  letter-spacing: .09em;
+  transition: box-shadow 180ms ease, filter 180ms ease;
+}
+.login-button:hover { box-shadow: 0 0 22px rgb(212 175 55 / 30%); filter: brightness(1.06); }
+.login-alert { display: flex; align-items: center; gap: 9px; margin: 0 0 17px; padding: 11px 12px; border: 1px solid rgb(215 125 112 / 46%); background: rgb(115 39 34 / 20%); color: #e8b2a8; font-size: .62rem; line-height: 1.5; }
+.login-alert span { display: grid; width: 17px; height: 17px; flex: 0 0 auto; place-items: center; border: 1px solid currentColor; border-radius: 50%; font-size: .6rem; }
+
+.demo-access { margin-top: 25px; padding-top: 19px; border-top: 1px solid rgb(212 175 55 / 18%); }
+.demo-heading { display: flex; align-items: center; gap: 10px; color: #b6a05d; font-size: .51rem; letter-spacing: .18em; }
+.demo-heading i { height: 1px; flex: 1; background: linear-gradient(90deg, #6b592c, transparent); }
+.demo-access > p { margin: 8px 0 12px; color: #847f75; font-size: .58rem; }
+.demo-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.demo-option { display: grid; gap: 5px; padding: 11px; border: 1px solid #39362d; background: rgb(11 11 10 / 75%); color: #c6c0b5; cursor: pointer; text-align: left; transition: border-color 180ms ease, background 180ms ease; }
+.demo-option:hover { border-color: var(--gold); background: rgb(212 175 55 / 6%); }
+.demo-role { color: #e7d59b; font-size: .58rem; }
+.demo-email, .demo-password { overflow: hidden; color: #928c81; font: .5rem var(--font-body); text-overflow: ellipsis; white-space: nowrap; }
+.demo-fill { margin-top: 3px; color: var(--gold-light); font-size: .5rem; }
+.demo-fill b { padding-left: 4px; font-weight: 400; }
+.demo-warning { display: block; margin-top: 13px; color: #756f63; font-size: .5rem; line-height: 1.5; }
+.return-link { position: absolute; bottom: 22px; color: #b1aa9b; font-size: .58rem; letter-spacing: .06em; text-decoration: none; transition: color 160ms ease; }
+.return-link:hover { color: var(--gold-light); }
+
+@keyframes card-arrive { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 520px) {
+  .login-page { padding: 82px 15px 64px; }
+  .portal-brand { top: 22px; }
+  .login-card { padding: 27px 21px; }
+  .demo-options { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

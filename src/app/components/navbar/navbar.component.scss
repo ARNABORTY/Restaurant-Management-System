@@ -1,0 +1,252 @@
+:host {
+  position: absolute;
+  z-index: 20;
+  top: 0;
+  right: 0;
+  left: 0;
+}
+
+.site-header {
+  display: flex;
+  min-height: 88px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(22px, 7vw, 108px);
+  border-bottom: 1px solid rgb(255 255 255 / 9%);
+  background: linear-gradient(180deg, rgb(8 8 8 / 74%), rgb(8 8 8 / 16%));
+  backdrop-filter: blur(13px);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #f7f4ed;
+  text-decoration: none;
+}
+
+.brand-mark {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+}
+
+.brand-mark span {
+  margin-left: -6px;
+  color: #f5f2eb;
+}
+
+.brand-name {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+}
+
+.brand-name b {
+  color: var(--gold);
+  font-weight: 400;
+}
+
+.navigation {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 1.5vw, 28px);
+}
+
+.navigation a {
+  color: #dedbd4;
+  font-size: 0.69rem;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+.navigation a:hover {
+  color: var(--gold-light);
+}
+
+.navigation a.active {
+  color: var(--gold-light);
+}
+
+.navigation .portal-link {
+  color: var(--gold-light);
+}
+
+.portal-link span {
+  display: block;
+  margin-top: 3px;
+  color: #a59c86;
+  font-size: 0.53rem;
+  letter-spacing: 0.05em;
+}
+
+.role-badge {
+  padding: 8px 10px;
+  border: 1px solid rgb(212 175 55 / 38%);
+  color: var(--gold-light);
+  font-size: 0.55rem;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.logout-button {
+  padding: 10px 13px;
+  border: 1px solid rgb(212 175 55 / 68%);
+  background: linear-gradient(110deg, #b28c2d, #d4af37);
+  color: #17140b;
+  cursor: pointer;
+  font: 600 0.59rem var(--font-body);
+  letter-spacing: 0.05em;
+  transition: box-shadow 180ms ease, filter 180ms ease;
+}
+
+.logout-button:hover {
+  box-shadow: 0 0 16px rgb(212 175 55 / 25%);
+  filter: brightness(1.08);
+}
+
+.navigation .nav-cta {
+  padding: 12px 17px;
+  border: 1px solid rgb(212 175 55 / 65%);
+  color: var(--gold-light);
+  transition:
+    background 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.navigation .nav-cta:hover {
+  background: rgb(212 175 55 / 10%);
+  box-shadow: 0 0 20px rgb(212 175 55 / 15%);
+}
+
+.nav-cta span {
+  padding-left: 7px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cart-button {
+  display: inline-flex;
+  min-height: 39px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  border: 1px solid rgb(212 175 55 / 62%);
+  background: rgb(212 175 55 / 8%);
+  color: var(--gold-light);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  transition:
+    background 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.cart-button:hover {
+  background: rgb(212 175 55 / 16%);
+  box-shadow: 0 0 18px rgb(212 175 55 / 14%);
+}
+
+.cart-button svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.4;
+}
+
+.cart-count {
+  display: grid;
+  min-width: 19px;
+  height: 19px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--gold);
+  color: #14120b;
+  font-size: 0.58rem;
+  font-weight: 700;
+}
+
+.menu-toggle {
+  display: none;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgb(212 175 55 / 45%);
+  background: transparent;
+}
+
+.menu-toggle span {
+  display: block;
+  width: 17px;
+  height: 1px;
+  margin: 5px auto;
+  background: var(--gold);
+}
+
+@media (max-width: 1180px) {
+  .site-header {
+    min-height: 74px;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .cart-button {
+    min-height: 37px;
+  }
+
+  .navigation {
+    position: absolute;
+    top: 73px;
+    right: 0;
+    left: 0;
+    display: none;
+    align-items: stretch;
+    gap: 0;
+    padding: 10px 24px 22px;
+    border-bottom: 1px solid rgb(212 175 55 / 25%);
+    background: rgb(13 13 13 / 97%);
+  }
+
+  .navigation.is-open {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .navigation a {
+    padding: 14px 5px;
+    border-bottom: 1px solid rgb(255 255 255 / 7%);
+  }
+
+  .navigation .nav-cta {
+    align-self: flex-start;
+    margin-top: 15px;
+    padding: 12px 16px;
+    border: 1px solid rgb(212 175 55 / 65%);
+  }
+
+  .role-badge {
+    align-self: flex-start;
+    margin-top: 12px;
+  }
+
+  .logout-button {
+    align-self: flex-start;
+    margin-top: 12px;
+  }
+}

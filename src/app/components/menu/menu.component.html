@@ -1,0 +1,74 @@
+<section class="menu-section section-wrap" id="menu">
+  <div class="section-heading">
+    <span class="eyebrow">A TASTE OF THE EXTRAORDINARY</span>
+    <h2>Our <em>Signature</em> Menu</h2>
+    <p>Inspired by the seasons. Rooted in heritage. Made to be remembered.</p>
+  </div>
+
+  <div class="category-filters" role="group" aria-label="Filter menu by category">
+    @for (category of categories; track category) {
+      <button
+        type="button"
+        [class.active]="activeCategory() === category"
+        [attr.aria-pressed]="activeCategory() === category"
+        (click)="selectCategory(category)"
+      >
+        {{ category }}
+      </button>
+    }
+  </div>
+
+  <div class="dish-grid">
+    @for (dish of filteredDishes; track dish.name) {
+      <article class="dish-card">
+        <div class="dish-image">
+          <img [src]="dish.image" [alt]="dish.name" loading="lazy" />
+          @if (dish.tag) {
+            <span class="dish-tag">{{ dish.tag }}</span>
+          }
+        </div>
+        <div class="dish-info">
+          <div class="dish-title-row">
+            <h3>{{ dish.name }}</h3>
+            <span class="dish-price">{{ dish.price | currency: 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}</span>
+          </div>
+          <p>{{ dish.description }}</p>
+          <span class="dish-category">{{ dish.category }}</span>
+          <div class="order-controls">
+            @if (cart.quantityFor(dish.id) > 0) {
+              <button
+                class="quantity-button"
+                type="button"
+                [attr.aria-label]="'Remove one ' + dish.name + ' from order'"
+                (click)="cart.decrement(dish.id)"
+              >
+                −
+              </button>
+              <span class="quantity-value" [attr.aria-label]="cart.quantityFor(dish.id) + ' in order'">
+                {{ cart.quantityFor(dish.id) }}
+              </span>
+              <button
+                class="quantity-button"
+                type="button"
+                [attr.aria-label]="'Add one ' + dish.name + ' to order'"
+                (click)="addToOrder(dish)"
+              >
+                +
+              </button>
+            } @else {
+              <button class="add-to-order" type="button" (click)="addToOrder(dish)">
+                Add to Order <span>+</span>
+              </button>
+            }
+          </div>
+        </div>
+      </article>
+    }
+  </div>
+
+  <div class="menu-footnote">
+    <span></span>
+    <p>Our menu celebrates the finest seasonal produce. Please let us know about any dietary preferences.</p>
+    <span></span>
+  </div>
+</section>

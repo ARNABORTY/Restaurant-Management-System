@@ -1,0 +1,195 @@
+<main class="kds-page">
+  <div class="kds-shell">
+    <header class="kds-heading">
+      <div>
+        <span class="eyebrow">GOODY FOODY · BACK OF HOUSE</span>
+        <h1>Kitchen <em>Display</em></h1>
+        <p>Every plate, prepared with care.</p>
+      </div>
+      <div class="live-status"><span></span> LIVE SERVICE</div>
+    </header>
+
+    @if (orderService.kitchenAlert(); as alert) {
+      <section class="executive-alert" role="alert">
+        <span class="alert-pulse" aria-hidden="true"></span>
+        <div>
+          <strong>EXECUTIVE PRIORITY</strong>
+          <p>{{ alert.message }}</p>
+        </div>
+        <time [attr.datetime]="alert.createdAt.toISOString()">
+          {{ alert.createdAt | date: 'h:mm a' }}
+        </time>
+        <button type="button" (click)="acknowledgeKitchenAlert(alert.id)">
+          Acknowledge
+        </button>
+      </section>
+    }
+
+    <section class="kds-columns" aria-label="Kitchen orders by status">
+      <div class="order-column incoming-column">
+        <header class="column-heading">
+          <div class="column-title">
+            <span class="column-marker"></span>
+            <h2>Incoming Orders</h2>
+          </div>
+          <span class="order-count">{{ incomingOrders().length }}</span>
+        </header>
+
+        @if (incomingOrders().length === 0) {
+          <div class="column-empty">
+            <span aria-hidden="true">✦</span>
+            <p>No incoming orders</p>
+          </div>
+        }
+
+        @for (order of incomingOrders(); track order.orderId) {
+          <article class="order-ticket received">
+            <header class="ticket-heading">
+              <div>
+                <span class="ticket-label">ORDER</span>
+                <h3>#{{ order.orderId }}</h3>
+              </div>
+              <span class="elapsed-time">{{ elapsedTime(order) }}</span>
+            </header>
+            <div class="ticket-meta">
+              <span class="table-number">{{ order.tableNumber }}</span>
+              <span>{{ order.customerName }}</span>
+            </div>
+            <ul class="ticket-items">
+              @for (item of order.items; track item.id) {
+                <li>
+                  <span class="item-quantity">{{ item.quantity }}×</span>
+                  <span class="item-name">
+                    {{ item.name }}
+                    @if (item.specialInstructions) {
+                      <small>{{ item.specialInstructions }}</small>
+                    }
+                  </span>
+                </li>
+              }
+            </ul>
+            <footer class="ticket-footer">
+              <span>{{ order.orderTimestamp | date: 'h:mm a' }}</span>
+              <button type="button" class="ticket-action start-action" (click)="startPreparing(order.orderId)">
+                Start Preparing <span>→</span>
+              </button>
+            </footer>
+          </article>
+        }
+      </div>
+
+      <div class="order-column preparing-column">
+        <header class="column-heading">
+          <div class="column-title">
+            <span class="column-marker"></span>
+            <h2>Preparing</h2>
+          </div>
+          <span class="order-count">{{ preparingOrders().length }}</span>
+        </header>
+
+        @if (preparingOrders().length === 0) {
+          <div class="column-empty">
+            <span aria-hidden="true">✦</span>
+            <p>Nothing on the pass</p>
+          </div>
+        }
+
+        @for (order of preparingOrders(); track order.orderId) {
+          <article class="order-ticket preparing">
+            <header class="ticket-heading">
+              <div>
+                <span class="ticket-label">ORDER</span>
+                <h3>#{{ order.orderId }}</h3>
+              </div>
+              <span class="elapsed-time">{{ elapsedTime(order) }}</span>
+            </header>
+            <div class="ticket-meta">
+              <span class="table-number">{{ order.tableNumber }}</span>
+              <span>{{ order.customerName }}</span>
+            </div>
+            <ul class="ticket-items">
+              @for (item of order.items; track item.id) {
+                <li>
+                  <span class="item-quantity">{{ item.quantity }}×</span>
+                  <span class="item-name">
+                    {{ item.name }}
+                    @if (item.specialInstructions) {
+                      <small>{{ item.specialInstructions }}</small>
+                    }
+                  </span>
+                </li>
+              }
+            </ul>
+            <footer class="ticket-footer">
+              <span>{{ order.orderTimestamp | date: 'h:mm a' }}</span>
+              <button type="button" class="ticket-action ready-action" (click)="markReady(order.orderId)">
+                Mark Ready <span>→</span>
+              </button>
+            </footer>
+          </article>
+        }
+      </div>
+
+      <div class="order-column ready-column">
+        <header class="column-heading">
+          <div class="column-title">
+            <span class="column-marker"></span>
+            <h2>Ready / Completed</h2>
+          </div>
+          <span class="order-count">{{ readyOrders().length }}</span>
+        </header>
+
+        @if (readyOrders().length === 0) {
+          <div class="column-empty">
+            <span aria-hidden="true">✦</span>
+            <p>Nothing ready just yet</p>
+          </div>
+        }
+
+        @for (order of readyOrders(); track order.orderId) {
+          <article class="order-ticket" [class.served]="order.status === 'Served'">
+            <header class="ticket-heading">
+              <div>
+                <span class="ticket-label">{{ order.status === 'Served' ? 'COMPLETED' : 'ON THE PASS' }}</span>
+                <h3>#{{ order.orderId }}</h3>
+              </div>
+              <span class="elapsed-time">{{ elapsedTime(order) }}</span>
+            </header>
+            <div class="ticket-meta">
+              <span class="table-number">{{ order.tableNumber }}</span>
+              <span>{{ order.customerName }}</span>
+            </div>
+            <ul class="ticket-items">
+              @for (item of order.items; track item.id) {
+                <li>
+                  <span class="item-quantity">{{ item.quantity }}×</span>
+                  <span class="item-name">
+                    {{ item.name }}
+                    @if (item.specialInstructions) {
+                      <small>{{ item.specialInstructions }}</small>
+                    }
+                  </span>
+                </li>
+              }
+            </ul>
+            <footer class="ticket-footer">
+              <span>{{ order.orderTimestamp | date: 'h:mm a' }}</span>
+              @if (order.status === 'Served') {
+                <span class="served-label">Served to table</span>
+              } @else {
+                <button type="button" class="ticket-action serve-action" (click)="serveToTable(order.orderId)">
+                  Serve to Table <span>✓</span>
+                </button>
+              }
+            </footer>
+          </article>
+        }
+      </div>
+    </section>
+
+    <footer class="kds-footer">
+      <span>ORDERS SYNC IN REAL TIME</span>
+      <span>{{ orderService.activeOrderCount() }} active {{ orderService.activeOrderCount() === 1 ? 'order' : 'orders' }}</span>
+    </footer>
+  </div>
+</main>

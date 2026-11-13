@@ -1,0 +1,57 @@
+<section class="testimonials-section" id="reviews" aria-labelledby="reviews-title">
+  <div class="press-strip" aria-label="Press and culinary recognition">
+    <span class="press-intro">IN GOOD COMPANY</span>
+    <span class="press-mark"><b>MICHELIN</b><small>GUIDE FEATURED</small></span>
+    <span class="press-mark"><b>AD</b><small>DESIGN AWARD</small></span>
+    <span class="press-mark"><b>TIMES FOOD</b><small>&amp; NIGHTLIFE WINNER</small></span>
+  </div>
+
+  <div class="review-heading">
+    <span class="eyebrow">KIND WORDS, KEPT CLOSE</span>
+    <h2 id="reviews-title">A table remembered.</h2>
+    <p>Stories from guests who made the evening their own.</p>
+  </div>
+
+  <div
+    class="testimonial-carousel"
+    role="region"
+    aria-roledescription="carousel"
+    aria-label="Guest testimonials"
+    (mouseenter)="pauseAutoplay()"
+    (mouseleave)="resumeAutoplay()"
+    (focusin)="pauseAutoplay()"
+    (focusout)="resumeAutoplay()"
+  >
+    <button class="carousel-arrow" type="button" aria-label="Previous review" (click)="showPrevious()">←</button>
+    <div class="testimonial-stage" aria-live="polite">
+      @for (review of testimonials; track review.id; let index = $index) {
+        @if (activeIndex() === index) {
+          <article class="testimonial-card" [attr.aria-label]="'Review ' + (index + 1) + ' of ' + testimonials.length">
+            <div class="stars" role="img" aria-label="5 out of 5 stars">
+              @for (star of stars; track star) { <span aria-hidden="true">★</span> }
+            </div>
+            <blockquote>“{{ review.quote }}”</blockquote>
+            <div class="guest-details">
+              <strong>{{ review.guestName }}</strong>
+              <span>{{ review.city }} <i aria-hidden="true">·</i> {{ review.occasion }}</span>
+            </div>
+          </article>
+        }
+      }
+    </div>
+    <button class="carousel-arrow" type="button" aria-label="Next review" (click)="showNext()">→</button>
+  </div>
+
+  <div class="carousel-dots" role="group" aria-label="Choose a guest review">
+    @for (review of testimonials; track review.id; let index = $index) {
+      <button
+        type="button"
+        class="carousel-dot"
+        [class.active]="activeIndex() === index"
+        [attr.aria-label]="'Show review ' + (index + 1)"
+        [attr.aria-current]="activeIndex() === index ? 'true' : null"
+        (click)="selectTestimonial(index)"
+      ></button>
+    }
+  </div>
+</section>

@@ -1,0 +1,269 @@
+<section class="reservation-section" id="reservations">
+  <div class="reservation-image" role="img" aria-label="Elegant candlelit restaurant dining room">
+    <div class="image-caption">
+      <span>AN EVENING</span>
+      <em>to remember</em>
+    </div>
+  </div>
+
+  <div class="reservation-content">
+    <span class="eyebrow">YOUR EVENING, BEAUTIFULLY SET</span>
+    <h2>Reserve a <em>moment.</em></h2>
+    <p class="reservation-lede">Choose your date, service and the table that feels like yours.</p>
+
+    <form [formGroup]="form" (ngSubmit)="submitReservation()">
+      <fieldset class="booking-step date-step">
+        <legend><span>01</span> CHOOSE YOUR EVENING</legend>
+        <div class="calendar-strip" role="group" aria-label="Select a date">
+          @for (day of calendarDays; track day.dateKey) {
+            <button
+              class="calendar-day"
+              type="button"
+              [class.selected]="selectedDate === day.dateKey"
+              [attr.aria-pressed]="selectedDate === day.dateKey"
+              (click)="selectDate(day.dateKey)"
+            >
+              <span class="day-name">{{ day.dayName }}</span>
+              <strong>{{ day.dayNumber }}</strong>
+              <span class="month-name">{{ day.monthName }}</span>
+              <span class="day-availability">
+                @if (slotsAvailable(day.dateKey) > 0) {
+                  {{ slotsAvailable(day.dateKey) }} slots
+                } @else {
+                  Fully booked
+                }
+              </span>
+            </button>
+          }
+        </div>
+      </fieldset>
+
+      <fieldset class="booking-step time-step">
+        <legend><span>02</span> SELECT A SERVICE</legend>
+        @for (group of slotGroups; track group.label) {
+          <div class="service-group">
+            <h3>{{ group.label }}</h3>
+            <div class="slot-list">
+              @for (time of group.slots; track time) {
+                <button
+                  class="time-slot"
+                  type="button"
+                  [class.selected]="selectedTime === time"
+                  [disabled]="tablesAvailable(time) === 0"
+                  [attr.aria-pressed]="selectedTime === time"
+                  (click)="selectTime(time)"
+                >
+                  <span>{{ time }}</span>
+                  @if (tablesAvailable(time) > 0) {
+                    <small>{{ tablesAvailable(time) }} tables</small>
+                  } @else {
+                    <small>Unavailable</small>
+                  }
+                </button>
+              }
+            </div>
+          </div>
+        }
+        @if (showError(form.controls.time)) {
+          <small class="field-error">Please choose an available service time.</small>
+        }
+      </fieldset>
+
+      <fieldset class="booking-step zone-step">
+        <legend><span>03</span> CHOOSE YOUR AMBIANCE</legend>
+        <div class="zone-list" role="group" aria-label="Select a seating zone">
+          @for (zone of seatingZones; track zone) {
+            <button
+              class="zone-option"
+              type="button"
+              [class.selected]="selectedZone === zone"
+              [attr.aria-pressed]="selectedZone === zone"
+              (click)="selectZone(zone)"
+            >
+              <span class="zone-icon" aria-hidden="true">
+                @switch (zone) {
+                  @case ('Main Royal Hall') { ♜ }
+                  @case ('Private VIP Booth') { ◈ }
+                  @case ('Candlelight Terrace') { ✧ }
+                }
+              </span>
+              <span>{{ zone }}</span>
+            </button>
+          }
+        </div>
+      </fieldset>
+
+      <fieldset class="booking-step table-step">
+        <legend><span>04</span> SELECT YOUR TABLE</legend>
+        <p class="step-hint">
+          @if (!selectedTime) {
+            Choose a time slot to see table availability.
+          } @else {
+            Tables for {{ guestCount }} {{ guestCount === 1 ? 'guest' : 'guests' }} · {{ selectedZone }}
+          }
+        </p>
+        <div class="table-picker" role="group" aria-label="Select an available table">
+          @for (table of tablesForSelectedZone(); track table.id) {
+            <button
+              class="table-choice"
+              type="button"
+              [class.selected]="form.controls.tableId.value === table.id"
+              [class.unavailable]="tableAvailability(table) !== 'Available'"
+              [disabled]="tableAvailability(table) !== 'Available'"
+              [attr.aria-pressed]="form.controls.tableId.value === table.id"
+              (click)="selectTable(table)"
+            >
+              <span class="chair-art" aria-hidden="true">⌑</span>
+              <strong>{{ table.tableNumber }}</strong>
+              <small>{{ table.seats }} seats</small>
+              <span class="table-state">{{ tableAvailability(table) }}</span>
+            </button>
+          }
+        </div>
+        @if (showError(form.controls.tableId)) {
+          <small class="field-error">Please select an available table for your party.</small>
+        }
+      </fieldset>
+
+      <fieldset class="booking-step guest-step">
+        <legend><span>05</span> YOUR DETAILS</legend>
+        <div class="guest-fields">
+          <label class="field field-wide">
+            <span>Guest full name</span>
+            <input
+              type="text"
+              formControlName="guestFullName"
+              placeholder="Name for your reservation"
+              autocomplete="name"
+            />
+            @if (showError(form.controls.guestFullName)) {
+              <small class="field-error">Please enter your full name.</small>
+            }
+          </label>
+
+          <label class="field">
+            <span>Mobile number</span>
+            <span class="phone-input">
+              <b>+91</b>
+              <input
+                type="tel"
+                formControlName="mobileNumber"
+                placeholder="98765 43210"
+                autocomplete="tel-national"
+                inputmode="numeric"
+                maxlength="10"
+              />
+            </span>
+            @if (showError(form.controls.mobileNumber)) {
+              <small class="field-error">Enter a valid 10-digit Indian mobile number.</small>
+            }
+          </label>
+
+          <label class="field">
+            <span>Email address</span>
+            <input
+              type="email"
+              formControlName="emailAddress"
+              placeholder="you@example.com"
+              autocomplete="email"
+            />
+            @if (showError(form.controls.emailAddress)) {
+              <small class="field-error">Enter a valid email address.</small>
+            }
+          </label>
+
+          <label class="field">
+            <span>Number of guests</span>
+            <select formControlName="guestCount" (change)="changeGuestCount()">
+              @for (count of guestCounts; track count) {
+                <option [ngValue]="count">{{ count }} {{ count === 1 ? 'guest' : 'guests' }}</option>
+              }
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Special occasion</span>
+            <select formControlName="occasion">
+              @for (occasion of occasions; track occasion) {
+                <option [ngValue]="occasion">{{ occasion }}</option>
+              }
+            </select>
+          </label>
+
+          <label class="field field-wide">
+            <span>Dietary requirements / chef notes <small>(optional)</small></span>
+            <textarea
+              formControlName="chefNotes"
+              rows="3"
+              maxlength="400"
+              placeholder="Allergies, preferences or a note for our chef..."
+            ></textarea>
+            @if (form.controls.chefNotes.hasError('maxlength') && form.controls.chefNotes.touched) {
+              <small class="field-error">Please keep your note under 400 characters.</small>
+            }
+          </label>
+        </div>
+
+        <label class="welcome-drink">
+          <input type="checkbox" formControlName="welcomeDrink" />
+          <span class="drink-check" aria-hidden="true"></span>
+          <span class="drink-copy">
+            <strong>Pre-order a signature welcome drink</strong>
+            <small>A chilled Nimbu &amp; Elderflower, ready on arrival.</small>
+          </span>
+          <span class="drink-price">₹480 <small>/ guest</small></span>
+        </label>
+      </fieldset>
+
+      @if (bookingError()) {
+        <p class="booking-error" role="alert">{{ bookingError() }}</p>
+      }
+
+      <button class="submit-button" type="submit">
+        Confirm Reservation <span>→</span>
+      </button>
+      <p class="reservation-note">For parties of 9 or more, please call <a href="tel:+911140012345">+91 11 4001 2345</a></p>
+    </form>
+  </div>
+</section>
+
+@if (confirmedBooking(); as booking) {
+  <div class="pass-backdrop" (click)="closePass()">
+    <section
+      class="reservation-pass"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="pass-title"
+      (click)="$event.stopPropagation()"
+    >
+      <button class="pass-close" type="button" aria-label="Close reservation pass" (click)="closePass()">×</button>
+      <div class="pass-topline"><span>GOODY FOODY</span><span>EST. 2026</span></div>
+      <span class="pass-ornament" aria-hidden="true">✦</span>
+      <p class="pass-kicker">A PLACE HAS BEEN SET FOR YOU</p>
+      <h2 id="pass-title">Your evening <em>awaits.</em></h2>
+      <div class="pass-reference">{{ booking.referenceId }}</div>
+      <div class="pass-rule"></div>
+      <div class="pass-details">
+        <div><span>GUEST</span><strong>{{ booking.guestFullName }}</strong></div>
+        <div><span>DATE</span><strong>{{ formatBookingDate(booking.date) }}</strong></div>
+        <div><span>SERVICE</span><strong>{{ booking.time }}</strong></div>
+        <div><span>TABLE</span><strong>{{ booking.tableNumber }}</strong></div>
+        <div><span>PARTY</span><strong>{{ booking.guestCount }} {{ booking.guestCount === 1 ? 'guest' : 'guests' }}</strong></div>
+        <div><span>SETTING</span><strong>{{ booking.zone }}</strong></div>
+      </div>
+      <div class="pass-bottom">
+        <div class="qr-placeholder" role="img" [attr.aria-label]="'Decorative QR placeholder for reservation ' + booking.referenceId">
+          <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="pass-note">
+          <strong>Present this pass on arrival</strong>
+          <span>We look forward to welcoming you.</span>
+          <small>Confirmation {{ booking.referenceId }}</small>
+        </div>
+      </div>
+      <button class="download-pass" type="button" (click)="downloadCalendarPass(booking)">
+        Add to Calendar / Download Pass <span>↓</span>
+      </button>
+    </section>
+  </div>
+}
